@@ -1,0 +1,13 @@
+// path: course-service/src/main/java/vn/edu/crs/course_service/repository/CourseRepository.java
+// purpose: repository JPA thao tac bang course, ke thua sẵn CRUD tu Spring Data JPA
+
+package vn.edu.crs.course_service.repository;
+
+import vn.edu.crs.course_service.entity.Course;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CourseRepository extends JpaRepository<Course, Long> {
+    boolean existsByTenMonHocIgnoreCase(String tenMonHoc);
+}
