@@ -13,3 +13,16 @@ export interface PagedResponse<T> {
     number: number;
     size: number;
 }
+// path: crs-frontend/src/types/course.ts
+
+export interface CourseFormValues {
+    tenMonHoc: string;
+    soTinChi: string;
+    soChoToiDa: string;
+}
+
+export const emptyCourseForm: CourseFormValues = {
+    tenMonHoc: '',
+    soTinChi: '',
+    soChoToiDa: '',
+};

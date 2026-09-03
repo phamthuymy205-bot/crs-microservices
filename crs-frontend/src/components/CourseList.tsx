@@ -1,5 +1,5 @@
 // path: crs-frontend/src/components/CourseList.tsx
-// purpose: hien thi danh sach mon hoc, xu ly du 4 trang thai Loading/Success/Empty/Error
+// purpose: cap nhat onEdit/onDelete thanh optional, chi hien cot "Thao tac" khi duoc truyen vao
 
 import type { Course } from '../types/course';
 import type { LoadState } from '../api/useCourses';
@@ -9,12 +9,19 @@ interface CourseListProps {
     state: LoadState;
     errorMessage: string;
     onRetry: () => void;
+    onEdit?: (course: Course) => void;
+    onDelete?: (course: Course) => void;
 }
 
-export default function CourseList({ courses, state, errorMessage, onRetry }: CourseListProps) {
-    if (state === 'loading') {
-        return <p>Dang tai danh sach mon hoc...</p>;
-    }
+export default function CourseList({
+                                       courses,
+                                       state,
+                                       errorMessage,
+                                       onRetry,
+                                       onEdit,
+                                       onDelete,
+                                   }: CourseListProps) {
+    if (state === 'loading') return <p>Dang tai danh sach mon hoc...</p>;
 
     if (state === 'error') {
         return (
@@ -25,11 +32,10 @@ export default function CourseList({ courses, state, errorMessage, onRetry }: Co
         );
     }
 
-    if (state === 'empty') {
-        return <p>Khong tim thay mon hoc nao phu hop.</p>;
-    }
+    if (state === 'empty') return <p>Khong tim thay mon hoc nao phu hop.</p>;
 
-    // state === 'success'
+    const showActions = !!onEdit || !!onDelete;
+
     return (
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
@@ -37,6 +43,7 @@ export default function CourseList({ courses, state, errorMessage, onRetry }: Co
                 <th>Ten mon hoc</th>
                 <th>So tin chi</th>
                 <th>So cho con lai</th>
+                {showActions && <th>Thao tac</th>}
             </tr>
             </thead>
             <tbody>
@@ -47,6 +54,16 @@ export default function CourseList({ courses, state, errorMessage, onRetry }: Co
                     <td style={{ color: course.soChoConLai === 0 ? '#b91c1c' : 'inherit' }}>
                         {course.soChoConLai} / {course.soChoToiDa}
                     </td>
+                    {showActions && (
+                        <td>
+                            {onEdit && <button onClick={() => onEdit(course)}>Sua</button>}
+                            {onDelete && (
+                                <button onClick={() => onDelete(course)} style={{ marginLeft: 8, color: '#b91c1c' }}>
+                                    Xoa
+                                </button>
+                            )}
+                        </td>
+                    )}
                 </tr>
             ))}
             </tbody>
